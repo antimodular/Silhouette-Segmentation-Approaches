@@ -154,3 +154,111 @@ Outdoor 2.4M
 - A lot of harware accessories
 - plug and play installation 
 
+## Camera + Segmentation   
+
+Overall the advantage of this technique is that it cuts out the work of manually cutting out the background through a region of interest and provides potentially useful additional information like the 3D skeleton, unique IDs for each person in the scene. It will also only mask people and will ignore all other backround objects. The disadvantages include: limited ranges, inability to track from certain angles, higher required specs to perform well. 
+
+### Data
+
+| Approach                        | Range M | Sillhoutte Quality (1-5 best) | Skeleton Quality (1-5) | Angle (1-5) |
+|---------------------------------|---------|-------------------------------|------------------------|-------------|
+| Azure Kinect+ body tracking SDK | 7       | 3                             | 5                      | 3           |
+| BodyPix                         | 6.7     | 1                             | 0                      | 5           |
+| Kinect v2 + body tracking SDK   | 4.2     | 0                             | 3                      | 2           |
+| RealSense D435i + Nuitrack      | 4       | 4                             | 2                      | 3           |
+
+### Footage + Notes
+
+
+#### Intel RealSense + NuiTrack
+
+
+Distance 
+
+![Intel RealSense + NuiTrack Distance](Assets/nuitrack/gifs/nuitrack_distance.gif "Intel RealSense + NuiTrack")
+
+Occlusion
+
+![Intel RealSense + NuiTrack Occlusion ](Assets/nuitrack/gifs/nuitrack_occlusion.gif "Intel RealSense + NuiTrack Occlusion")
+
+Angle
+
+![Intel RealSense + NuiTrack Occlusion ](Assets/nuitrack/gifs/nuitrack_angle.gif "Intel RealSense + NuiTrack Occlusion")
+
+**notes**
+
+- They threshold the depth data at 4M in the example. Is it possible to increase that threshold through their API?  
+- As of writing, there is no support for [multiple sensors](https://community.nuitrack.com/t/adding-multiple-cameras-to-nuitrack/991/11). 
+
+#### Azure Kinect + body Track SDK 
+
+Distance 
+
+![Azure Kinect + body Track SDK  Distance](Assets/azureTrack/gifs/azureTrack_distance.gif "Azure Kinect + body Track SDK ")
+
+Occlusion
+
+![Azure Kinect + body Track SDK  Occlusion ](Assets/azureTrack/gifs/azureTrack_occlusion.gif "Azure Kinect + body Track SDK Occlusion")
+
+Angle
+
+![Azure Kinect + body Track SDK  Angle ](Assets/azureTrack/gifs/azureTrack_angle.gif "Azure Kinect + body Track SDK Angle")
+
+
+**notes**
+
+- Tracking range and persistence is impressive.
+- Less false skeletons than earlier kinect.
+- Example only available in NFOV mode and not available in wide mode. Tracking range would decrease in wide mode. 
+- While the skeleton information is robust the silhouette segmentation is patchy.
+- Requires high specs to run the tracking sdk. 
+
+#### Kinect 2 + body Track SDK
+
+Distance 
+
+![Indoor Kinect Distance](Assets/kinect2/gifs/kinect2_distance.gif "Indoor Kinect Distance")
+
+Occlusion 
+
+![Indoor Kinect Occlusion](Assets/kinect2/gifs/kinect2_occulsion.gif "Indoor Kinect Occlusion")
+ 
+Angle 
+
+![Indoor Kinect Angle](Assets/kinect2/gifs/kinect2_angle.gif "Indoor Kinect Angle")
+
+**notes**
+
+- No silhouette segmentation available. 
+- frequent false positives.
+
+#### BodyPix 
+
+Distance 
+
+![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_distance.gif "BodyPix Sample")
+
+Occlusion 
+
+![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_crowd.gif "BodyPix Sample")
+
+Angle 
+
+![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_angle.gif "BodyPix Sample")
+
+**notes**
+
+- Ran test on macBook pro (2.3 GHz, 16GB of Ram, and NVIDIA GeForce GT 750M) and on a windows tower (3.6 GHz, 16GB of Ram, Quadro P4000). Gifs are from windows tower at 30fps on the macbook they were running at 10 fps and below. 
+
+## Other Possibilities  
+
+This isn't an exhaustive list. Here are some of the other promising possibilities.
+
+- [OpenCV BackgroundSubtractorMOG](https://docs.opencv.org/3.3.0/db/d5c/tutorial_py_bg_subtraction.html) - traditional rgb camera with no ML. Requires calibration when the scene changes. 
+- [foreground extraction - FgSegNet_v2](https://github.com/lim-anggun/FgSegNet_v2) - ML approach with an RGB camera. Would need high specs for a good fps and resolution.
+- [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark/issues/42) - ML approach on RGB camera. Only masks and not labels would be necessary. Looks like it has a max of 10 fps for realtime performance. 
+- [VideoPose3D](https://github.com/facebookresearch/VideoPose3D) - Doesn't provide silhouettes and not intended for realtime. 
+- [arkit IOS](https://developer.apple.com/documentation/arkit/arbody2d) - Only available in IOS
+- [Detectron realtime](https://github.com/cedrickchee/realtime-detectron) - FPS is still low for realtime
+
+
