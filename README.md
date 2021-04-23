@@ -177,8 +177,8 @@ Overall the advantage of this technique is that it cuts out the work of manually
 | BodyPix 2                       | 6.7     | 1                             | 0                      | 4           |
 | Kinect v2 + body tracking SDK   | 4.2     | 0                             | 3                      | 2           |
 | Oak-D + Segmentation     | --       | ---                          | ---                  | ---         |
-| RealSense D435i + Nuitrack      | 4       | 4                             | 2                      | 3           |
-| RealSense D435i + Nuitrack      | 4       | 4                             | 2                      | 3           |
+| Nvidia Broadcast Engine    | --       | --                            | --                    | --          |
+| Detectron    | --       | 5                            | --                    | --          |
 
 ### Footage + Notes
 
