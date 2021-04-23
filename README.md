@@ -65,7 +65,7 @@ Outdoor Far 5M
 ![Outdoor Far Stereo Zed](Assets/stereoZed/gifs/ZED_outdoor_far.gif "Outdoor Far Stereo Zed")
 
 
-**notes**
+**Notes**
 
 - IR cut filter on sensor, if it was possible to remove it would open up more installation possibilities.
 - When testing range outside it only extended 10M not the full 20. 
@@ -98,13 +98,24 @@ Outdoor Far 8.3 M
 
 ![Outdoor Far Intel RealSense](Assets/IntelRealSense/gifs/realSense_outdoor_far.gif "Outdoor Far Intel RealSense")
 
-**notes**
+Sillhouttes extracted with depth Thresholding 
+
+![Sillhouttes extracted](Assets/IntelRealSense/gifs/realSenseSillhouttesUnprocessed.gif "Sillhouttes extracted with depth Thresholding ")
+
+![Sillhouttes Extracted and Vectorized](Assets/IntelRealSense/gifs/realSenseSillhouttes.gif "Sillhouttes extracted with depth Thresholding ")
+
+**Notes**
 
 - Stereo cameras do not have an IR cut filter. So stereo is operational in only IR light.
 - Provides good usb support and feedback. It says which usb type it is connected  to and continues to work at a lower quality when its connected to usb 2.0. 
 - The 3D view provides dramatically less quality than the 2D view. (see above gifs)  
 - Lists 1280x800 as an option, but it will not show any depth when that resolution is set.
+- Also availble in an outdoor enclosure the Framos [D435e](https://www.framos.com/en/framos-depth-camera-d435e-camera-only-22806), but much more expensive. allows for POE over industrial ethernet connection M12. 
+
+![Framos D435e](Assets/IntelRealSense/imgs/framos-D435e.png )
  
+![Framos D435e](Assets/IntelRealSense/imgs/customCasing.png )
+Custom casing produced by Antimodular for Speaking Willow project
 
 #### Azure Kinect 
 
@@ -128,7 +139,7 @@ Outdoor Narrow mode 3.1M
 
 
 
-**notes**
+**Notes**
 
 - If it has something in the near field, far field drops/poorly affected. Example: Cannot be sitting in middle of table with table in view, needs to be on the edge of the table
 - Provides significantly better range in the "binded" mode.
@@ -148,7 +159,7 @@ Outdoor 2.4M
 ![Outdoor Kinect ](Assets/kinect2/gifs/kinect2_outdoors.gif "Outdoor Kinect")
 
 
-**notes**
+**Notes**
 
 - Discontinued support 
 - A lot of harware accessories
@@ -163,8 +174,10 @@ Overall the advantage of this technique is that it cuts out the work of manually
 | Approach                        | Range M | Sillhoutte Quality (1-5 best) | Skeleton Quality (1-5) | Angle (1-5) |
 |---------------------------------|---------|-------------------------------|------------------------|-------------|
 | Azure Kinect+ body tracking SDK | 7       | 3                             | 5                      | 3           |
-| BodyPix                         | 6.7     | 1                             | 0                      | 5           |
+| BodyPix 2                       | 6.7     | 1                             | 0                      | 4           |
 | Kinect v2 + body tracking SDK   | 4.2     | 0                             | 3                      | 2           |
+| Oak-D + Segmentation     | --       | ---                          | ---                  | ---         |
+| RealSense D435i + Nuitrack      | 4       | 4                             | 2                      | 3           |
 | RealSense D435i + Nuitrack      | 4       | 4                             | 2                      | 3           |
 
 ### Footage + Notes
@@ -185,7 +198,7 @@ Angle
 
 ![Intel RealSense + NuiTrack Occlusion ](Assets/nuitrack/gifs/nuitrack_angle.gif "Intel RealSense + NuiTrack Occlusion")
 
-**notes**
+**Notes**
 
 - They threshold the depth data at 4M in the example. Is it possible to increase that threshold through their API?  
 - As of writing, there is no support for [multiple sensors](https://community.nuitrack.com/t/adding-multiple-cameras-to-nuitrack/991/11). 
@@ -205,7 +218,7 @@ Angle
 ![Azure Kinect + body Track SDK  Angle ](Assets/azureTrack/gifs/azureTrack_angle.gif "Azure Kinect + body Track SDK Angle")
 
 
-**notes**
+**Notes**
 
 - Tracking range and persistence is impressive.
 - Less false skeletons than earlier kinect.
@@ -227,28 +240,103 @@ Angle
 
 ![Indoor Kinect Angle](Assets/kinect2/gifs/kinect2_angle.gif "Indoor Kinect Angle")
 
-**notes**
+**Notes**
 
 - No silhouette segmentation available. 
 - frequent false positives.
 
-#### BodyPix 
+#### Oak-D 
+![Oak-D Image](Assets/oakD/oak-d.jpg "Oak-D")
 
-Distance 
+![Oak-D Depth](Assets/oakD/gifs/oakD-Depth.gif "Oak-D Stereo Depth")
 
-![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_distance.gif "BodyPix Sample")
+![Oak-D Depth](Assets/oakD/gifs/oakD-deeplabv3p.gif "deeplabv3p")
 
-Occlusion 
-
-![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_crowd.gif "BodyPix Sample")
 
 Angle 
 
-![BodyPix Sample](Assets/bodyPix/gifs/bodyPix_angle.gif "BodyPix Sample")
+![Oak-D Depth](Assets/oakD/gifs/oakD-deeplabv3p-overhead.gif "Oak-D From Overhead")
 
-**notes**
+**Notes**
 
-- Ran test on macBook pro (2.3 GHz, 16GB of Ram, and NVIDIA GeForce GT 750M) and on a windows tower (3.6 GHz, 16GB of Ram, Quadro P4000). Gifs are from windows tower at 30fps on the macbook they were running at 10 fps and below. 
+
+- See full testing [here](https://www.notion.so/Oak-D-Testing-9703b1a764e8483c8b381e1e4691a585)
+- Limited FOV depending on the model used 
+- Offloads processing to the device iself rather than on the computer 
+- Many models available through openVINO
+- Segmentation tested with deeplabv3p_person model
+
+
+#### BodyPix 2
+
+Multiperson RGB
+
+![BodyPix Sample](Assets/bodyPix2/gifs/bodyPix-RGB-MultiPerson-translucent2.gif "BodyPix2 Sample")
+ResNet50, internalResolution full, output stride 32. (full settings [here](Assets/bodyPix2/clips/bodyPix-RGB-MultiPerson-translucent2.mov))
+
+Multiperson RGB Masked
+
+![BodyPix Sample](Assets/bodyPix2/gifs/bodyPix-RGB-MultiPerson-opaque.gif "BodyPix2 Sample")
+(full settings [here](Assets/bodyPix2/clips/bodyPix-RGB-MultiPerson-opaque.mov))
+
+Multiperson IR 
+
+![BodyPix Sample](Assets/bodyPix2/gifs/bodyPix-IR-MultiPerson-translucent.gif "BodyPix2 Sample")
+
+(full settings [here](Assets/bodyPix2/clips/bodyPix-IR-MultiPerson-translucent.mov))
+Simulate night conditions with IR illumination 
+
+Multiperson IR Opaque
+
+![BodyPix Sample](Assets/bodyPix2/gifs/bodyPix-IR-MultiPerson-opaque.gif "BodyPix2 Sample")
+
+(full settings [here](Assets/bodyPix2/clips/bodyPix-IR-MultiPerson-opaque.mov))
+
+Angle
+
+![BodyPix Sample](Assets/bodyPix2/gifs/overheadBodyPix.gif "BodyPix Sample")
+
+**Notes**
+
+- Ran test on Windows 10 (3.6 GHz, 32GB of Ram, GeForce RTX 2080)
+- Performed much better under with IR only light than the Nvidia Broadcast Engine
+- Tested with Google's Coral USB Accelerator for running bodypix locally ([link to test](Assets/bodyPix2/gifs/coralReference4.gif)). As of writing this it was challenging to set up and [no automatic smoothing](https://github.com/google-coral/project-bodypix/issues/5) available. 
+
+#### Nvidia Broadcast Engine
+
+Multiperson RGB
+
+![Nvidia Broadcast Engine Sample](Assets/NvidiaBroadcastEngine/gifs/nvidia-RGB-multiPerson2.gif "Nvidia Broadcast Engine Sample")
+
+Multiperson RGB Masked 
+
+![Nvidia Broadcast Engine Sample](Assets/NvidiaBroadcastEngine/gifs/nvidia-RGB-multiPerson-masked.gif "Nvidia Broadcast Engine Sample")
+
+Multiperson IR
+
+![Nvidia Broadcast Engine Sample](Assets/NvidiaBroadcastEngine/gifs/nvidia-IR-multiPerson.gif "Nvidia Broadcast Engine Sample")
+
+Single person IR Masked
+
+![Nvidia Broadcast Engine Sample](Assets/NvidiaBroadcastEngine/gifs/nvidia-IR-single-masked.gif "Nvidia Broadcast Engine Sample")
+
+**Notes**
+
+- Ran test on Windows 10 (3.6 GHz, 32GB of Ram, GeForce RTX 2080)
+- Very easy to install and use when the very high specs are met.  
+- The intended purpose is to mask out gamers as they are streaming. Definitely using this outside of its intended purpose- in IR light only and at a greater distance. 
+
+### Detectron 
+
+| rcnn                    | PointRend|
+|---------------------------------|---------|
+| ![detectron](Assets/detectron/imgs/rcnn-mask1.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult1.jpg )|
+| ![detectron](Assets/detectron/imgs/rcnn-mask2.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult2.jpg )|
+| ![detectron](Assets/detectron/imgs/rcnn-mask3.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult3.jpg )|
+| ![detectron](Assets/detectron/imgs/rcnn-mask4.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult4.jpg )|
+| ![detectron](Assets/detectron/imgs/rcnn-mask5.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult5.jpg )|
+| ![detectron](Assets/detectron/imgs/rcnn-mask6.jpg )| ![detectron](Assets/detectron/imgs/pntRendResult6.jpg )|   
+
 
 ## Other Possibilities  
 
