@@ -1,5 +1,7 @@
 # Silhouette Segmentation Approaches
 
+More up to date and better organized information available on [our notion page](https://www.notion.so/Silhouette-Segmentation-Research-9bef2c8c302248c199b0fea73c872d3c).
+
 The following is a practical comparison of various techniques of segmenting silhouettes/the general foreground from the background. It is intended as cursory research to inform which approach we use for extracting silhouettes for future installations. We will both compare based off specs/ collected data and share sample footage under various conditions. Important factors include: 
 
 - Cost 
